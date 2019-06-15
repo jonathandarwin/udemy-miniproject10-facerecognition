@@ -18,19 +18,11 @@ for i, files in enumerate(onlyfiles):
     Training_Data.append(np.asarray(images, dtype=np.uint8))
     Labels.append(i)
 
-# Create a numpy array for both training data and labels
 Labels = np.asarray(Labels, dtype=np.int32)
 
-# Initialize facial recognizer
 model = cv2.face.LBPHFaceRecognizer_create()
-# NOTE: For OpenCV 3.0 use cv2.face.createLBPHFaceRecognizer()
-
-# Let's train our model 
 model.train(np.asarray(Training_Data), np.asarray(Labels))
 print('Model trained sucessefully')
-
-
-
 
 
 face_classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -39,6 +31,7 @@ def face_detector(img, size=0.5):
     
     # Convert image to grayscale
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+    # detect face menggunakan haar cascade
     faces = face_classifier.detectMultiScale(gray, 1.3, 5)
     if faces is ():
         return img, []
@@ -72,6 +65,8 @@ while True:
             
         cv2.putText(image, display_string, (100, 120), cv2.FONT_HERSHEY_COMPLEX, 1, (255,120,150), 2)
         
+        # confidence : seberapa yakin algoritma terhadap hasil yang dikeluarkan
+        # biasanya di set kalo diatas 75 itu jawaban ny valid
         if confidence > 75:
             cv2.putText(image, 'Unlocked', (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2)
             cv2.imshow('Face Recognition', image )
