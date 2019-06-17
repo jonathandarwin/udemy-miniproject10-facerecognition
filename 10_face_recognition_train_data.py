@@ -45,11 +45,12 @@ def face_detector(img, size=0.5):
 
 # Open Webcam
 cap = cv2.VideoCapture(0)
-
+text = ''
+color = ()
 while True:
 
     ret, frame = cap.read()
-    
+    frame = cv2.flip(frame, 1)
     image, face = face_detector(frame)
     
     try:
@@ -68,17 +69,20 @@ while True:
         # confidence : seberapa yakin algoritma terhadap hasil yang dikeluarkan
         # biasanya di set kalo diatas 75 itu jawaban ny valid
         if confidence > 75:
-            cv2.putText(image, 'Unlocked', (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2)
-            cv2.imshow('Face Recognition', image )
+            text = 'Unlocked'   
+            color = (0,255,0)         
         else:
-            cv2.putText(image, 'Locked', (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255), 2)
-            cv2.imshow('Face Recognition', image )
+            text = 'Locked'
+            color = (0,0,255)         
 
     except:
-        cv2.putText(image, 'No Face Found', (220, 120) , cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255), 2)
-        cv2.putText(image, 'Locked', (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255), 2)
-        cv2.imshow('Face Recognition', image )
+        text = 'Locked'
+        color = (0,0,255)     
+        cv2.putText(image, 'No Face Found', (220, 120) , cv2.FONT_HERSHEY_COMPLEX, 1, color, 2)        
         pass
+
+    cv2.putText(image, text, (250, 450), cv2.FONT_HERSHEY_COMPLEX, 1, color, 2)
+    cv2.imshow('Face Recognition', image)
         
     if cv2.waitKey(1) == 13: #13 is the Enter Key
         break
